@@ -1,0 +1,1461 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>قاب آرس</title>
+    <link href="https://fonts.googleapis.com/css2?family=Lalezar&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Lalezar', system-ui, sans-serif;
+        }
+
+        body {
+            background-color: #f8f9fa;
+            min-height: 100vh;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        .bg-black-btn, .buy-btn, .auth-btn {
+            background-color: #000 !important;
+            color: #fff !important;
+            border: none;
+            cursor: pointer;
+        }
+        .bg-black-btn:hover, .buy-btn:hover, .auth-btn:hover {
+            background-color: #222 !important;
+        }
+
+        .app-page {
+            display: none;
+        }
+        .app-page.active {
+            display: block;
+        }
+
+        .video-banner {
+            width: 100%;
+            height: 65px;
+            background-color: #000;
+            overflow: hidden;
+            position: relative;
+        }
+        .video-banner video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .navbar {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background-color: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.03);
+        }
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+        .logo-container img { height: 45px; width: auto; }
+        .brand-name { font-size: 1.5rem; color: #333; }
+        .nav-center { display: flex; justify-content: center; flex-grow: 1; }
+        .nav-menu { display: flex; list-style: none; gap: 25px; }
+        .nav-link { text-decoration: none; color: #333; display: flex; align-items: center; gap: 8px; font-size: 1.1rem; cursor: pointer; }
+        .nav-link:hover { color: #555; }
+        .nav-left { display: flex; align-items: center; gap: 20px; }
+        .cart-btn { text-decoration: none; color: #333; font-size: 1.3rem; position: relative; cursor: pointer; }
+        .cart-count { position: absolute; top: -8px; left: -10px; background: red; color: #fff; font-size: 0.8rem; padding: 2px 6px; border-radius: 50%; }
+        .auth-btn { padding: 8px 20px; font-size: 1.1rem; border-radius: 50px; white-space: nowrap; }
+        .user-profile { display: flex; align-items: center; gap: 8px; cursor: pointer; padding: 5px 15px; border-radius: 50px; background: #f0f0f0; }
+        .user-profile i { font-size: 1.3rem; color: #333; }
+        .user-profile span { font-size: 1rem; color: #333; }
+        .menu-toggle { display: none; font-size: 1.5rem; background: none; border: none; cursor: pointer; }
+
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: -320px;
+            width: 300px;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            z-index: 2000;
+            box-shadow: 4px 0 30px rgba(0,0,0,0.15);
+            transition: left 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+            padding: 30px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            border-radius: 0 25px 25px 0;
+            border: 1px solid rgba(255,255,255,0.3);
+            border-left: none;
+        }
+        .sidebar.active { left: 0; }
+        .sidebar-close {
+            align-self: flex-end;
+            font-size: 1.8rem;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #333;
+            padding: 5px 10px;
+        }
+        .sidebar-menu {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            text-align: right;
+            margin-top: 20px;
+        }
+        .sidebar-menu li a {
+            text-decoration: none;
+            color: #222;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 15px;
+            border-radius: 12px;
+            transition: background 0.3s;
+        }
+        .sidebar-menu li a:hover {
+            background: rgba(0,0,0,0.05);
+        }
+        .sidebar-menu li a i {
+            width: 24px;
+            text-align: center;
+            color: #555;
+        }
+        .sidebar-footer {
+            margin-top: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            padding-top: 15px;
+            border-top: 1px solid rgba(0,0,0,0.08);
+        }
+        .sidebar-footer .auth-btn {
+            width: 100%;
+            padding: 12px;
+            border-radius: 12px;
+            font-size: 1.1rem;
+        }
+        .sidebar-footer .cart-btn {
+            text-align: center;
+            padding: 12px;
+            background: rgba(0,0,0,0.05);
+            border-radius: 12px;
+            font-size: 1.1rem;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+        .sidebar-footer .cart-btn .cart-count {
+            position: relative;
+            top: 0;
+            left: 0;
+        }
+
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.3);
+            z-index: 1999;
+            backdrop-filter: blur(4px);
+        }
+        .sidebar-overlay.active { display: block; }
+
+        .banner-container { max-width: 1200px; margin: 30px auto; padding: 0 15px; position: relative; }
+        .banner-slider { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; border-radius: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); scroll-behavior: smooth; -webkit-overflow-scrolling: touch; }
+        .banner-slider::-webkit-scrollbar { display: none; }
+        .banner-item { flex: 0 0 100%; width: 100%; scroll-snap-align: start; position: relative; }
+        .banner-item img { width: 100%; height: auto; display: block; object-fit: cover; min-height: 150px; background: #eee; }
+
+        .categories-container { max-width: 1200px; margin: 40px auto; padding: 0 15px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+        .category-card img { width: 100%; height: auto; display: block; }
+
+        .brands-section { max-width: 900px; margin: 30px auto; padding: 0 15px; }
+        .brands-title { font-size: 1.8rem; color: #333; margin-bottom: 25px; text-align: right; }
+        .brands-grid { display: flex; justify-content: space-around; align-items: center; gap: 15px; flex-wrap: wrap; }
+        .brand-item { text-align: center; width: 140px; cursor: pointer; }
+        .brand-item img { width: 120px; height: 120px; border-radius: 50%; object-fit: cover; margin-bottom: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.06); transition: transform 0.3s; }
+        .brand-item:hover img { transform: scale(1.08); }
+        .brand-item div { font-size: 1.2rem; }
+
+        .home-products-section { max-width: 1200px; margin: 50px auto; padding: 0 15px; direction: rtl; }
+        .home-products-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            -webkit-overflow-scrolling: touch;
+            scroll-behavior: smooth;
+            padding: 5px 0;
+        }
+        .home-products-grid::-webkit-scrollbar { display: none; }
+        .home-products-grid .product-card {
+            scroll-snap-align: start;
+            min-width: 250px;
+        }
+
+        .shop-page-container { 
+            max-width: 1200px; 
+            margin: 30px auto; 
+            padding: 0 15px; 
+            display: grid; 
+            grid-template-columns: 3fr 1fr; 
+            gap: 30px; 
+            direction: rtl; 
+        }
+        .filter-sidebar { 
+            background: #fff; 
+            padding: 20px; 
+            border-radius: 15px; 
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05); 
+            height: fit-content; 
+        }
+        .filter-group { margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 15px; }
+        .filter-group h4 { font-size: 1.2rem; margin-bottom: 10px; color: #333; text-align: right; }
+        .filter-group label { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; font-size: 1rem; color: #666; cursor: pointer; direction: rtl; }
+        
+        .products-showcase {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+        
+        .product-card { background: #fff; border-radius: 15px; padding: 15px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.03); display: flex; flex-direction: column; justify-content: space-between; position: relative; }
+        .product-card img { width: 100%; height: auto; border-radius: 10px; margin-bottom: 15px; }
+        .product-name { font-size: 1.1rem; color: #333; margin-bottom: 10px; }
+        .product-price { font-size: 1.2rem; font-weight: bold; margin-bottom: 15px; }
+        .buy-btn { padding: 10px; border-radius: 8px; font-size: 1rem; width: 100%; }
+        .star-badge { position: absolute; top: 10px; right: 10px; background: rgba(255,255,255,0.8); color: #ffc107; padding: 5px; border-radius: 50%; font-size: 1rem; }
+
+        .pagination { grid-column: span 4; display: flex; justify-content: center; gap: 10px; margin-top: 30px; }
+        .page-btn { padding: 8px 16px; background: #fff; border: 1px solid #ddd; border-radius: 5px; cursor: pointer; }
+        .page-btn.active { background: #000; color: #fff; border-color: #000; }
+
+        .register-page-container {
+            display: none;
+            min-height: 80vh;
+            background: #fff;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            direction: rtl;
+            text-align: right;
+        }
+        .register-page-container.active { display: block; }
+        .register-page-container h2 { font-size: 2rem; margin-bottom: 25px; border-bottom: 2px solid #000; padding-bottom: 10px; }
+        .form-control-lg { width: 100%; padding: 12px; border: 2px solid #eee; border-radius: 10px; font-family: inherit; font-size: 1.1rem; margin-top: 5px; transition: border-color 0.3s; }
+        .form-control-lg:focus { border-color: #000; outline: none; }
+        
+        .cart-page-container {
+            display: none;
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 30px;
+            border-radius: 20px;
+            background: #fff;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            direction: rtl;
+        }
+        .cart-page-container.active { display: block; }
+        .cart-page-container h2 { 
+            border-bottom: 2px solid #000; 
+            padding-bottom: 10px; 
+            margin-bottom: 20px;
+            color: #333;
+            text-align: center;
+        }
+        .cart-table { width: 100%; border-collapse: collapse; text-align: right; margin-top: 20px; }
+        .cart-table th, .cart-table td { padding: 12px; border-bottom: 1px solid #eee; }
+        .cart-table th { font-size: 1.1rem; color: #777; background: #f9f9f9; }
+        .cart-remove-btn { background: none; border: none; color: red; cursor: pointer; font-size: 1.1rem; }
+        .cart-total {
+            text-align: left; 
+            margin-top: 20px; 
+            font-size: 1.4rem;
+            font-weight: bold;
+            padding: 10px 0;
+        }
+        .cart-actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .cart-actions .buy-btn {
+            width: 100%;
+            max-width: 350px;
+            padding: 15px 40px;
+            font-size: 1.3rem;
+            border-radius: 12px;
+            letter-spacing: 2px;
+        }
+
+        .about-section { 
+            max-width: 1200px; 
+            margin: 70px auto; 
+            padding: 0 15px; 
+            display: none;
+            grid-template-columns: 1fr 1fr; 
+            gap: 40px; 
+            align-items: center; 
+        }
+        .about-section.active { display: grid; }
+        .about-right img { width: 100%; height: auto; border-radius: 20px; display: block; }
+        .about-title { font-size: 2rem; color: #333; margin-bottom: 20px; text-align: right; }
+        .about-text { font-size: 1.2rem; color: #666; line-height: 2; text-align: right; }
+
+        .footer-wrapper { width: 100%; margin-top: 40px; display: flex; flex-direction: column; }
+        .footer-top-image { position: relative; width: 100%; overflow: hidden; line-height: 0; }
+        .footer-top-image img { width: 100%; height: auto; display: block; }
+        .footer-image-fade { position: absolute; bottom: 0; left: 0; width: 100%; height: 150px; background: linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 100%); }
+        .footer-content { background-color: #000; color: #fff; padding: 40px 20px 20px 20px; }
+        .footer-container-inner { max-width: 1200px; margin: 0 auto; }
+        .footer-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; border-bottom: 1px solid #222; padding-bottom: 30px; text-align: right; }
+        .footer-col h3 { font-size: 1.5rem; color: #fff; margin-bottom: 15px; border-bottom: 2px solid #fff; width: fit-content; padding-bottom: 5px; }
+        .footer-col p, .footer-col a { color: #ccc; font-size: 1.1rem; text-decoration: none; display: block; margin-bottom: 10px; }
+        .social-links { display: flex; gap: 15px; margin-top: 15px; flex-wrap: wrap; }
+        .social-links a { font-size: 1.6rem; color: #fff; transition: color 0.3s; }
+        .social-links a:hover { color: #e4405f; }
+        .footer-middle-logo { text-align: center; padding: 25px 0; border-bottom: 1px solid #222; }
+        .footer-middle-logo img { max-width: 260px; height: auto; }
+        .footer-bottom { display: flex; justify-content: space-between; align-items: center; padding-top: 20px; font-size: 0.9rem; color: #666; flex-wrap: wrap; gap: 10px; }
+        .secret-dot { width: 6px; height: 6px; background-color: #111; border-radius: 50%; cursor: pointer; display: inline-block; }
+
+        .admin-fullscreen-page { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #0b0f19; color: #f1f3f5; z-index: 5000; overflow: hidden; direction: rtl; }
+        .admin-container { display: flex; height: 100%; }
+        .admin-sidebar { width: 280px; background: #121824; border-left: 1px solid #1e293b; padding: 25px 15px; display: flex; flex-direction: column; gap: 10px; }
+        .admin-sidebar h2 { font-size: 1.6rem; margin-bottom: 20px; text-align: center; color: #fff; border-bottom: 1px solid #1e293b; padding-bottom: 15px; }
+        .admin-menu-btn { width: 100%; background: none; border: none; color: #94a3b8; text-align: right; padding: 12px 15px; font-size: 1.1rem; font-family: inherit; cursor: pointer; border-radius: 8px; display: flex; align-items: center; gap: 10px; transition: all 0.3s; }
+        .admin-menu-btn:hover, .admin-menu-btn.active { background: #1e293b; color: #fff; }
+        .admin-content-area { flex-grow: 1; padding: 40px; overflow-y: auto; background: #0f172a; }
+        .admin-section-content { display: none; }
+        .admin-section-content.active { display: block; }
+        .admin-card-dark { background: #1e293b; padding: 25px; border-radius: 12px; border: 1px solid #334155; margin-bottom: 25px; }
+        .admin-card-dark h3 { font-size: 1.4rem; color: #fff; margin-bottom: 20px; border-bottom: 1px solid #334155; padding-bottom: 10px; }
+        .form-group-dark { margin-bottom: 20px; text-align: right; }
+        .form-group-dark label { display: block; margin-bottom: 8px; color: #94a3b8; font-size: 1rem; }
+        .form-control-dark { width: 100%; padding: 10px; background: #0f172a; border: 1px solid #334155; color: #fff; border-radius: 6px; font-family: inherit; font-size: 1rem; }
+        .form-control-dark:focus { border-color: #38bdf8; outline: none; }
+        .checkbox-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; cursor: pointer; color: #cbd5e1; font-size: 1.05rem; justify-content: flex-start; direction: rtl; }
+        .checkbox-row input[type="checkbox"] { width: 18px; height: 18px; accent-color: #38bdf8; cursor: pointer; }
+        .admin-table-dark { width: 100%; border-collapse: collapse; text-align: right; color: #cbd5e1; }
+        .admin-table-dark th, .admin-table-dark td { padding: 12px; border: 1px solid #334155; }
+        .admin-table-dark th { background: #121824; color: #fff; }
+        .admin-table-dark tr:nth-child(even) { background: #1e293b; }
+        .admin-p-item { display: flex; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 1px solid #334155; }
+        .admin-p-delete-btn { background: #ef4444; color: #fff; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; }
+
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); justify-content: center; align-items: center; z-index: 3000; }
+        .modal-content { background: white; padding: 30px; border-radius: 15px; width: 90%; max-width: 450px; position: relative; text-align: right; }
+        .close-btn { position: absolute; top: 10px; left: 10px; cursor: pointer; font-size: 1.5rem; }
+
+        .payment-glass-modal .modal-content {
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 2px solid rgba(0, 0, 0, 0.2);
+            border-radius: 30px;
+            max-width: 480px;
+            text-align: center;
+            padding: 35px 25px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+        }
+        .payment-glass-modal .modal-content h2 {
+            color: #1a1a2e;
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+        }
+        .payment-glass-modal .modal-content p {
+            color: #2d2d44;
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 25px;
+        }
+        .payment-glass-modal .social-icons-row {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        .payment-glass-modal .social-icons-row a {
+            font-size: 2.8rem;
+            color: #1a1a2e;
+            transition: transform 0.3s, color 0.3s;
+            display: inline-block;
+        }
+        .payment-glass-modal .social-icons-row a:hover {
+            transform: scale(1.15);
+        }
+        .payment-glass-modal .social-icons-row .telegram-icon { color: #0088cc; }
+        .payment-glass-modal .social-icons-row .instagram-icon { color: #e4405f; }
+        .payment-glass-modal .social-icons-row .whatsapp-icon { color: #25D366; }
+        .payment-glass-modal .close-btn {
+            color: #333;
+            font-size: 1.8rem;
+        }
+
+        .user-profile-modal {
+            text-align: center;
+            padding: 10px 0;
+        }
+        .user-profile-modal i { font-size: 3rem; color: #333; margin-bottom: 10px; }
+        .user-profile-modal p { font-size: 1.1rem; color: #555; margin: 5px 0; }
+
+        /* ===== فیلتر شناور موبایل ===== */
+        .filter-fab {
+            display: none;
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            z-index: 999;
+            background: #000;
+            color: #fff;
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            border: none;
+            font-size: 1.5rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .filter-fab:hover { transform: scale(1.05); }
+        .filter-fab i { color: #fff; }
+
+        .filter-drawer {
+            display: none;
+            position: fixed;
+            bottom: 90px;
+            left: 20px;
+            z-index: 998;
+            background: rgba(255,255,255,0.92);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border-radius: 20px;
+            padding: 20px;
+            min-width: 250px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+            border: 1px solid rgba(255,255,255,0.3);
+            direction: rtl;
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+        .filter-drawer.active { display: block; }
+        .filter-drawer .filter-group:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+        .filter-drawer .close-drawer {
+            position: absolute;
+            top: 8px;
+            left: 12px;
+            background: none;
+            border: none;
+            font-size: 1.3rem;
+            cursor: pointer;
+            color: #555;
+        }
+
+        /* ===== سرچ ===== */
+        .search-box {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            align-items: center;
+        }
+        .search-box input {
+            flex: 1;
+            padding: 10px 15px;
+            border: 2px solid #eee;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-family: inherit;
+            transition: border-color 0.3s;
+            background: #fff;
+        }
+        .search-box input:focus {
+            border-color: #000;
+            outline: none;
+        }
+        .search-box button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 10px;
+            background: #000;
+            color: #fff;
+            cursor: pointer;
+            font-size: 1rem;
+            font-family: inherit;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 1200px) {
+            .products-showcase { grid-template-columns: repeat(3, 1fr); }
+        }
+
+        @media (max-width: 992px) {
+            .shop-page-container { 
+                grid-template-columns: 1fr; 
+                gap: 15px;
+            }
+            .products-showcase { grid-template-columns: repeat(2, 1fr); }
+            .admin-container { flex-direction: column; }
+            .admin-sidebar { width: 100%; height: auto; }
+            .nav-menu { display: none; }
+            .menu-toggle { display: block; }
+            .nav-left .auth-btn { display: none; }
+            .nav-left .user-profile { display: none; }
+            .nav-left .cart-btn { display: block; }
+            .brands-grid { gap: 10px; }
+            .brand-item { width: 100px; }
+            .brand-item img { width: 80px; height: 80px; }
+            /* فیلتر عادی در موبایل مخفی شود */
+            .filter-sidebar { display: none; }
+            .filter-fab { display: flex; align-items: center; justify-content: center; }
+            .shop-page-container { padding-bottom: 80px; }
+            .search-box { flex-direction: row; }
+        }
+
+        @media (max-width: 768px) {
+            .navbar { padding: 8px 12px; }
+            .logo-container img { height: 35px; }
+            .brand-name { font-size: 1.1rem; }
+            .video-banner { height: 50px; }
+            .banner-container { margin: 15px auto; }
+            .banner-item img { min-height: 100px; width: 100%; height: auto; }
+            .categories-container { grid-template-columns: 1fr 1fr; gap: 10px; margin: 20px auto; }
+            .home-products-grid { 
+                display: flex; 
+                gap: 12px; 
+                overflow-x: auto; 
+                scroll-snap-type: x mandatory;
+                -webkit-overflow-scrolling: touch;
+                padding: 5px 0;
+            }
+            .home-products-grid .product-card { 
+                min-width: 160px; 
+                flex: 0 0 auto; 
+                scroll-snap-align: start;
+            }
+            .products-showcase { 
+                grid-template-columns: 1fr 1fr; 
+                gap: 10px; 
+            }
+            .product-card { padding: 10px; }
+            .product-name { font-size: 0.9rem; }
+            .product-price { font-size: 0.95rem; }
+            .buy-btn { font-size: 0.8rem; padding: 8px; }
+            .about-section { grid-template-columns: 1fr; margin: 40px auto; }
+            .about-title { font-size: 1.5rem; }
+            .about-text { font-size: 1rem; }
+            .footer-grid { grid-template-columns: 1fr; gap: 20px; text-align: center; }
+            .footer-col h3 { margin: 0 auto 15px auto; }
+            .social-links { justify-content: center; }
+            .footer-bottom { flex-direction: column; text-align: center; }
+            .cart-page-container { padding: 15px; margin: 20px 10px; }
+            .cart-table th, .cart-table td { padding: 8px; font-size: 0.85rem; }
+            .cart-actions .buy-btn { max-width: 100%; padding: 14px; font-size: 1.1rem; }
+            .register-page-container { margin: 20px 10px; padding: 20px; }
+            .sidebar { width: 280px; left: -290px; }
+            .payment-glass-modal .modal-content { padding: 25px 15px; }
+            .payment-glass-modal .social-icons-row a { font-size: 2.2rem; }
+            .filter-drawer { min-width: 200px; left: 10px; right: 10px; bottom: 90px; }
+        }
+
+        @media (max-width: 480px) {
+            .home-products-grid .product-card { min-width: 130px; }
+            .home-products-grid { gap: 8px; }
+            .product-name { font-size: 0.75rem; }
+            .product-price { font-size: 0.8rem; }
+            .buy-btn { font-size: 0.7rem; padding: 5px; }
+            .products-showcase { grid-template-columns: 1fr 1fr; gap: 8px; }
+            .categories-container { grid-template-columns: 1fr 1fr; gap: 8px; }
+            .brand-item { width: 70px; }
+            .brand-item img { width: 60px; height: 60px; }
+            .brand-item div { font-size: 0.8rem; }
+            .brands-title { font-size: 1.2rem; }
+            .sidebar { width: 240px; left: -250px; }
+            .banner-item img { min-height: 80px; }
+            .filter-fab { width: 48px; height: 48px; font-size: 1.2rem; bottom: 15px; left: 15px; }
+            .filter-drawer { padding: 15px; min-width: 160px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+    <div class="sidebar" id="mobileSidebar">
+        <button class="sidebar-close" onclick="closeSidebar()">&times;</button>
+        <ul class="sidebar-menu">
+            <li><a href="javascript:void(0);" onclick="navigateTo('home'); closeSidebar();"><i class="fas fa-home"></i> خانه</a></li>
+            <li><a href="javascript:void(0);" onclick="navigateTo('shop'); closeSidebar();"><i class="fas fa-store"></i> فروشگاه</a></li>
+            <li><a href="javascript:void(0);" onclick="scrollToAbout(); closeSidebar();"><i class="fas fa-info-circle"></i> درباره ما</a></li>
+            <li><a href="javascript:void(0);" class="nav-link"><i class="fas fa-smile"></i> رضایت مشتریان</a></li>
+            <li><a href="javascript:void(0);" onclick="closeSidebar(); openPostalModal();"><i class="fas fa-shipping-fast"></i> پیگیری مرسولات پستی</a></li>
+        </ul>
+        <div class="sidebar-footer">
+            <button class="auth-btn" onclick="closeSidebar(); navigateTo('register');">ثبت نام / ورود</button>
+            <a href="javascript:void(0);" onclick="openCartFullscreen(); closeSidebar();" class="cart-btn">
+                <i class="fas fa-shopping-cart"></i> سبد خرید <span class="cart-count" id="mobileCartCount">0</span>
+            </a>
+        </div>
+    </div>
+
+    <div class="video-banner">
+        <video id="globalVideo" autoplay muted loop playsinline>
+            <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
+        </video>
+    </div>
+
+    <nav class="navbar">
+        <div class="nav-right">
+            <a href="javascript:void(0);" onclick="navigateTo('home')" class="logo-container">
+                <img src="https://uploadkon.ir/uploads/14ae04_26Picsart-26-07-03-19-23-01-047.png" alt="لوگو" />
+                <span class="brand-name">قاب آرس</span>
+            </a>
+        </div>
+        <div class="nav-center">
+            <ul class="nav-menu">
+                <li><a href="javascript:void(0);" onclick="navigateTo('home')" class="nav-link"><i class="fas fa-home"></i> خانه</a></li>
+                <li><a href="javascript:void(0);" onclick="navigateTo('shop')" class="nav-link"><i class="fas fa-store"></i> فروشگاه</a></li>
+                <li><a href="javascript:void(0);" onclick="scrollToAbout()" class="nav-link"><i class="fas fa-info-circle"></i> درباره ما</a></li>
+                <li><a href="javascript:void(0);" class="nav-link"><i class="fas fa-smile"></i> رضایت مشتریان</a></li>
+                <li><a href="javascript:void(0);" class="nav-link" onclick="openPostalModal();"><i class="fas fa-shipping-fast"></i> پیگیری مرسولات پستی</a></li>
+            </ul>
+        </div>
+        <div class="nav-left">
+            <a href="javascript:void(0);" onclick="openCartFullscreen()" class="cart-btn" title="سبد خرید">
+                <i class="fas fa-shopping-cart"></i><span class="cart-count" id="desktopCartCount">0</span>
+            </a>
+            <div id="authSection">
+                <button class="auth-btn" onclick="navigateTo('register')" id="loginBtn">ثبت نام / ورود</button>
+            </div>
+        </div>
+        <button class="menu-toggle" onclick="openSidebar()"><i class="fas fa-bars"></i></button>
+    </nav>
+
+    <div id="homePage" class="app-page active">
+        <div class="banner-container">
+            <div class="banner-slider" id="bannerSliderWrapper"></div>
+        </div>
+
+        <div class="categories-container">
+            <div class="category-card"><img src="https://uploadkon.ir/uploads/9cad04_26Picsart-26-07-04-14-49-42-278.png" loading="lazy"></div>
+            <div class="category-card"><img src="https://uploadkon.ir/uploads/b85c04_26Picsart-26-07-04-14-54-44-445.png" loading="lazy"></div>
+            <div class="category-card"><img src="https://uploadkon.ir/uploads/75fa04_26Picsart-26-07-04-14-58-34-478.png" loading="lazy"></div>
+        </div>
+
+        <div class="brands-section">
+            <h2 class="brands-title">انتخاب بر اساس مدل گوشی</h2>
+            <div class="brands-grid">
+                <div class="brand-item" onclick="filterShopByBrand('آیفون')"><img src="https://uploadkon.ir/uploads/716b04_26Picsart-26-07-04-15-19-15-677.png" loading="lazy"><div>آیفون</div></div>
+                <div class="brand-item" onclick="filterShopByBrand('سامسونگ')"><img src="https://uploadkon.ir/uploads/96ec04_26Picsart-26-07-04-15-20-57-712.png" loading="lazy"><div>سامسونگ</div></div>
+                <div class="brand-item" onclick="filterShopByBrand('شیاومی')"><img src="https://uploadkon.ir/uploads/a59f04_26Picsart-26-07-04-15-22-54-781.png" loading="lazy"><div>شیائومی</div></div>
+                <div class="brand-item" onclick="filterShopByBrand('هواوی')"><img src="https://uploadkon.ir/uploads/c85a04_26Picsart-26-07-04-15-25-18-108.png" loading="lazy"><div>هواوی</div></div>
+            </div>
+        </div>
+
+        <div class="home-products-section">
+            <h2 style="text-align: right; margin-bottom: 20px; font-size: 1.8rem;">قاب‌های ویژه و پیشنهادی</h2>
+            <div class="home-products-grid" id="homeStarredGrid"></div>
+        </div>
+    </div>
+
+    <div id="shopPage" class="app-page">
+        <div class="shop-page-container">
+            <div class="products-area">
+                <!-- سرچ -->
+                <div class="search-box">
+                    <input type="text" id="shopSearchInput" placeholder="جستجوی قاب..." oninput="renderShop()">
+                    <button onclick="renderShop()"><i class="fas fa-search"></i></button>
+                </div>
+                <div class="products-showcase" id="shopProductsGrid"></div>
+                <div class="pagination" id="shopPagination"></div>
+            </div>
+            <div class="filter-sidebar" id="filterSidebar">
+                <div class="filter-group">
+                    <h4>دسته‌بندی‌ها</h4>
+                    <label class="checkbox-row"><input type="checkbox" class="cat-filter" value="قاب های جین" onchange="renderShop()"> قاب‌های جین</label>
+                    <label class="checkbox-row"><input type="checkbox" class="cat-filter" value="جدید ترین قاب ها" onchange="renderShop()"> جدیدترین قاب‌ها</label>
+                    <label class="checkbox-row"><input type="checkbox" class="cat-filter" value="تابلو ها" onchange="renderShop()"> تابلوها</label>
+                </div>
+                <div class="filter-group">
+                    <h4>برندها</h4>
+                    <label class="checkbox-row"><input type="checkbox" class="cat-filter" id="filter-iphone" value="آیفون" onchange="renderShop()"> آیفون</label>
+                    <label class="checkbox-row"><input type="checkbox" class="cat-filter" id="filter-samsung" value="سامسونگ" onchange="renderShop()"> سامسونگ</label>
+                    <label class="checkbox-row"><input type="checkbox" class="cat-filter" id="filter-xiaomi" value="شیاومی" onchange="renderShop()"> شیائومی</label>
+                    <label class="checkbox-row"><input type="checkbox" class="cat-filter" id="filter-huawei" value="هواوی" onchange="renderShop()"> هواوی</label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- فیلتر شناور موبایل -->
+    <button class="filter-fab" id="filterFab" onclick="toggleFilterDrawer()"><i class="fas fa-sliders-h"></i></button>
+    <div class="filter-drawer" id="filterDrawer">
+        <button class="close-drawer" onclick="toggleFilterDrawer()"><i class="fas fa-times"></i></button>
+        <div class="filter-group">
+            <h4>دسته‌بندی‌ها</h4>
+            <label class="checkbox-row"><input type="checkbox" class="cat-filter-mobile" value="قاب های جین" onchange="syncFilters()"> قاب‌های جین</label>
+            <label class="checkbox-row"><input type="checkbox" class="cat-filter-mobile" value="جدید ترین قاب ها" onchange="syncFilters()"> جدیدترین قاب‌ها</label>
+            <label class="checkbox-row"><input type="checkbox" class="cat-filter-mobile" value="تابلو ها" onchange="syncFilters()"> تابلوها</label>
+        </div>
+        <div class="filter-group">
+            <h4>برندها</h4>
+            <label class="checkbox-row"><input type="checkbox" class="cat-filter-mobile" value="آیفون" onchange="syncFilters()"> آیفون</label>
+            <label class="checkbox-row"><input type="checkbox" class="cat-filter-mobile" value="سامسونگ" onchange="syncFilters()"> سامسونگ</label>
+            <label class="checkbox-row"><input type="checkbox" class="cat-filter-mobile" value="شیاومی" onchange="syncFilters()"> شیائومی</label>
+            <label class="checkbox-row"><input type="checkbox" class="cat-filter-mobile" value="هواوی" onchange="syncFilters()"> هواوی</label>
+        </div>
+    </div>
+
+    <div id="registerPage" class="app-page">
+        <div class="register-page-container active">
+            <h2>ثبت نام در قاب آرس</h2>
+            <div class="form-group-dark" style="text-align:right; color:#333;">
+                <label style="color:#333;">نام و نام خانوادگی کاربر:</label>
+                <input type="text" id="regName" class="form-control-lg" placeholder="مثلا: علی محمدی">
+            </div>
+            <div class="form-group-dark" style="text-align:right; color:#333;">
+                <label style="color:#333;">شماره تماس موبایل:</label>
+                <input type="tel" id="regPhone" class="form-control-lg" placeholder="09123456789">
+            </div>
+            <button class="buy-btn" style="width:100%; padding:15px; font-size:1.2rem; border-radius:10px; margin-top:20px;" onclick="handleRegistration()">تکمیل و ثبت حساب کاربری</button>
+        </div>
+    </div>
+
+    <div id="cartPage" class="app-page">
+        <div class="cart-page-container active">
+            <h2>🛒 سبد خرید شما</h2>
+            <table class="cart-table">
+                <thead>
+                    <tr>
+                        <th>تصویر</th>
+                        <th>نام کالا</th>
+                        <th>قیمت</th>
+                        <th>عملیات</th>
+                    </tr>
+                </thead>
+                <tbody id="cartItemsTableBody"></tbody>
+            </table>
+            <div class="cart-total">
+                جمع کل: <span id="cartTotalPrice">0</span> تومان
+            </div>
+            <div class="cart-actions">
+                <button class="buy-btn" onclick="proceedToCheckout()">🛒 خرید</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="about-section" id="about-section">
+        <div class="about-right"><img src="https://uploadkon.ir/uploads/e68204_26Picsart-26-07-03-19-22-46-901.png" loading="lazy"></div>
+        <div class="about-left">
+            <h2 class="about-title">درباره قاب آرس</h2>
+            <p class="about-text">
+                به فروشگاه قاب آرس خوش آمدید! ما در قاب آرس بهترین و باکیفیت‌ترین قاب‌های موبایل را برای انواع برندهای معتبر بازار فراهم کرده‌ایم. 
+                <br><br>
+                تیم ما با سال‌ها تجربه در زمینه تولید و عرضه قاب‌های موبایل، همواره سعی کرده است تا محصولاتی با کیفیت بالا و طراحی‌های منحصر‌به‌فرد را به مشتریان عزیز ارائه دهد. 
+                <br><br>
+                ما در قاب آرس به کیفیت، اصالت و رضایت مشتریان خود افتخار می‌کنیم و همواره در تلاشیم تا با ارائه بهترین خدمات، تجربه‌ای لذت‌بخش از خرید را برای شما رقم بزنیم. 
+                <br><br>
+                انتخاب ما، انتخابی هوشمندانه برای محافظت از گوشی شماست.
+            </p>
+        </div>
+    </div>
+
+    <div class="footer-wrapper">
+        <div class="footer-top-image">
+            <img src="https://uploadkon.ir/uploads/4abc04_26Picsart-26-07-04-18-42-33-153.png" loading="lazy">
+            <div class="footer-image-fade"></div>
+        </div>
+        <div class="footer-content">
+            <div class="footer-container-inner">
+                <div class="footer-grid">
+                    <div class="footer-col">
+                        <h3>قاب آرس</h3>
+                        <p>محافظ استایل گوشی شما</p>
+                        <p><i class="fas fa-phone"></i> 09039304464</p>
+                    </div>
+                    <div class="footer-col">
+                        <h3>شبکه‌های اجتماعی</h3>
+                        <div class="social-links">
+                            <a href="https://www.instagram.com/ares.cover.shop?igsh=MTZ3NnlhZDcwNHE4cA%3D%3D&utm_source=qr" target="_blank"><i class="fab fa-instagram"></i></a>
+                            <a href="https://t.me/arescovertm" target="_blank"><i class="fab fa-telegram"></i></a>
+                            <a href="https://wa.me/09039304464" target="_blank"><i class="fab fa-whatsapp"></i></a>
+                        </div>
+                    </div>
+                    <div class="footer-col">
+                        <h3>نمادها</h3>
+                        <div class="symbols-container"><div class="symbol-box">اینماد</div><div class="symbol-box">ساماندهی</div></div>
+                    </div>
+                </div>
+                <div class="footer-middle-logo">
+                    <img src="https://uploadkon.ir/uploads/06d405_26Picsart-26-07-05-12-10-35-543-1-.png" loading="lazy">
+                </div>
+                <div class="footer-bottom">
+                    <span>© تمامی حقوق برای فروشگاه قاب آرس محفوظ است.</span>
+                    <span class="secret-dot" onclick="promptAdminLogin()"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="adminFullscreenPage" class="admin-fullscreen-page">
+        <div class="admin-container">
+            <div class="admin-sidebar">
+                <h2>پنل آرس دات کام</h2>
+                <button class="admin-menu-btn active" onclick="switchAdminTab('ordersTab', this)"><i class="fas fa-shopping-bag"></i> سفارشات دریافتی</button>
+                <button class="admin-menu-btn" onclick="switchAdminTab('productsTab', this)"><i class="fas fa-box-open"></i> افزودن و حذف محصول</button>
+                <button class="admin-menu-btn" onclick="switchAdminTab('designTab', this)"><i class="fas fa-sliders-h"></i> بنرها و ویدیو بالا</button>
+                <button class="admin-btn-logout" style="margin-top:auto; width:100%; padding:12px; background:#ef4444; color:#fff; border:none; border-radius:5px; cursor:pointer;" onclick="closeAdminPanel()">خروج از پنل مدیریت</button>
+            </div>
+
+            <div class="admin-content-area">
+                <div id="ordersTab" class="admin-section-content active">
+                    <div class="admin-card-dark">
+                        <h3>لیست سفارشات کل کاربران</h3>
+                        <div style="overflow-x:auto;">
+                            <table class="admin-table-dark">
+                                <thead>
+                                    <tr>
+                                        <th>نام مشتری</th>
+                                        <th>تلفن</th>
+                                        <th>آدرس کامل فرستاده شده</th>
+                                        <th>عنوان قاب محصول</th>
+                                        <th>مدل گوشی</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="adminOrdersTableBody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="productsTab" class="admin-section-content">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                        <div class="admin-card-dark">
+                            <h3>افزودن محصول جدید</h3>
+                            <div class="form-group-dark">
+                                <label>نام قاب:</label>
+                                <input type="text" id="pName" class="form-control-dark">
+                            </div>
+                            <div class="form-group-dark">
+                                <label>قیمت به تومان:</label>
+                                <input type="number" id="pPrice" class="form-control-dark">
+                            </div>
+                            <div class="form-group-dark">
+                                <label>آدرس تصویر (URL) یا فایل:</label>
+                                <input type="text" id="pImgUrl" class="form-control-dark" placeholder="http://...">
+                                <input type="file" id="pImgFile" accept="image/*" style="margin-top:8px;">
+                            </div>
+                            <div class="form-group-dark">
+                                <label style="margin-bottom:10px; display:block;">تیک زدن دسته‌بندی‌ها:</label>
+                                <label class="checkbox-row"><input type="checkbox" class="p-cat" value="قاب های جین"> قاب‌های جین</label>
+                                <label class="checkbox-row"><input type="checkbox" class="p-cat" value="جدید ترین قاب ها"> جدیدترین قاب‌ها</label>
+                                <label class="checkbox-row"><input type="checkbox" class="p-cat" value="تابلو ها"> تابلوها</label>
+                                <label class="checkbox-row"><input type="checkbox" class="p-cat" value="آیفون"> آیفون</label>
+                                <label class="checkbox-row"><input type="checkbox" class="p-cat" value="سامسونگ"> سامسونگ</label>
+                                <label class="checkbox-row"><input type="checkbox" class="p-cat" value="شیاومی"> شیائومی</label>
+                                <label class="checkbox-row"><input type="checkbox" class="p-cat" value="هواوی"> هواوی</label>
+                            </div>
+                            <div class="form-group-dark">
+                                <label class="checkbox-row" style="color: #ffc107;"><input type="checkbox" id="pStar"> ⭐️ ستاره‌دار کردن (نمایش ویژه حداکثر ۱۰ تا در خانه)</label>
+                            </div>
+                            <button class="buy-btn" style="width:100%; padding:12px; border-radius:6px;" onclick="addNewProductFromAdmin()">ثبت و انتشار محصول</button>
+                        </div>
+
+                        <div class="admin-card-dark">
+                            <h3>لیست و حذف محصولات موجود</h3>
+                            <div id="adminProductsDeleteContainer" style="max-height: 500px; overflow-y: auto;"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="designTab" class="admin-section-content">
+                    <div class="admin-card-dark">
+                        <h3>مدیریت بنرهای اسلایدر اصلی و ویدیو</h3>
+                        <div class="form-group-dark">
+                            <label>آدرس URL ویدیو باریک بالای وبسایت:</label>
+                            <input type="text" id="adminVideoUrl" class="form-control-dark">
+                        </div>
+                        <div class="form-group-dark">
+                            <label>افزودن لینک عکس یا آپلود بنر اسلایدر (مکس ۵ عکس):</label>
+                            <input type="text" id="adminBannerUrl" class="form-control-dark" placeholder="http://...">
+                            <input type="file" id="adminBannerFile" accept="image/*" style="margin-top:8px; display:block;">
+                            <button class="buy-btn" style="margin-top:12px; padding:8px 15px; border-radius:5px;" onclick="addBannerFromAdmin()">افزودن بنر به لیست</button>
+                        </div>
+                        <div id="adminBannerList" style="margin:20px 0;"></div>
+                        <button class="buy-btn" style="width:100%; padding:12px;" onclick="saveGlobalSettings()">ذخیره تغییرات مدیا و ویدیو</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal payment-glass-modal" id="checkoutModal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeCheckoutModal()">&times;</span>
+            <h2>💳 درگاه پرداخت</h2>
+            <p>درگاه پرداخت و فروش درون سایتی در حال ساخت است<br>لطفا برای ثبت سفارش از یکی از گزینه‌های زیر استفاده کنید</p>
+            
+            <div class="social-icons-row">
+                <a href="https://t.me/arescovertm" target="_blank" class="telegram-icon" title="تلگرام"><i class="fab fa-telegram"></i></a>
+                <a href="https://www.instagram.com/ares.cover.shop?igsh=MTZ3NnlhZDcwNHE4cA%3D%3D&utm_source=qr" target="_blank" class="instagram-icon" title="اینستاگرام"><i class="fab fa-instagram"></i></a>
+                <a href="https://wa.me/09039304464" target="_blank" class="whatsapp-icon" title="واتساپ"><i class="fab fa-whatsapp"></i></a>
+            </div>
+            <p style="font-size:0.9rem; color:#555; margin-top:5px;">
+                <i class="fas fa-phone" style="margin-left:5px;"></i> واتساپ: 09039304464
+            </p>
+        </div>
+    </div>
+
+    <div class="modal" id="postalModal">
+        <div class="modal-content" style="text-align:center;">
+            <span class="close-btn" onclick="closePostalModal()">&times;</span>
+            <i class="fab fa-telegram" style="font-size:3.5rem; color:#24A1DE; margin-bottom:15px;"></i>
+            <h2>اطلاع‌رسانی قاب آرس</h2>
+            <p style="margin:15px 0; color:#555; line-height:1.7;">برای مطلع شدن از اخبار ها، قاب‌های جدید، پیگیری ارسال محصولات و ... به کانال تلگرامی ما بپیوندید:</p>
+            <a href="https://t.me/arescovertm" target="_blank" class="telegram-popup-btn" style="display:block; padding:12px; background:#24A1DE; color:#fff; text-decoration:none; border-radius:8px;"><i class="fab fa-telegram-plane"></i> عضویت در تلگرام قاب آرس</a>
+        </div>
+    </div>
+
+    <div class="modal" id="directBuyModal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeDirectBuyModal()">&times;</span>
+            <h2 style="margin-bottom:15px;">انتخاب مشخصات گوشی</h2>
+            <div class="form-group">
+                <label>انتخاب نوع برند همراه:</label>
+                <select id="directBrand" class="form-control-dark" style="color:#000; background:#fff; border:1px solid #ddd;" onchange="populateDirectModels()">
+                    <option value="">انتخاب کنید</option>
+                    <option value="iPhone">iPhone</option>
+                    <option value="Samsung">Samsung</option>
+                    <option value="Xiaomi">Xiaomi</option>
+                    <option value="Huawei">Huawei</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>انتخاب مدل دقیق گوشی:</label>
+                <select id="directModelList" class="form-control-dark" style="color:#000; background:#fff; border:1px solid #ddd;"></select>
+            </div>
+            <button class="buy-btn" style="width:100%; margin-top:10px; padding:12px;" onclick="addToCartFromDirect()">افزودن به سبد خرید</button>
+        </div>
+    </div>
+
+    <div class="modal" id="profileModal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeProfileModal()">&times;</span>
+            <div class="user-profile-modal">
+                <i class="fas fa-user-circle"></i>
+                <p><strong>نام:</strong> <span id="profileName">-</span></p>
+                <p><strong>شماره تماس:</strong> <span id="profilePhone">-</span></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const phoneModelsData = {
+            iPhone: ["iPhone", "17 Pro Max", "17 Pro", "17", "16 Pro Max", "16 Pro", "16", "15 Pro Max", "15 Pro", "15", "14 Pro Max", "14 Pro", "14 Plus", "14", "13 Pro Max", "13 Pro", "13", "13 Mini", "12 Pro Max", "12 Pro", "12", "12 Mini", "11 Pro Max", "11 Pro", "11", "XS Max", "XS", "X", "8/7", "8/7 Plus"],
+            Samsung: ["Samsung", "S25 fe", "S25 ultra", "S24", "S24 plus", "S24 ultra", "S23", "S23 plus", "S23 fe", "S23 ultra", "S22 ultra", "S21/S30", "S22", "S22 plus", "S21 fe", "S21 ultra", "S20", "S20 plus", "S20 fe", "S20 lite", "S7 edge", "S8 PLUS", "S7", "S8", "S9", "S5", "S4", "S9 plus", "S10", "S10 plus", "S10 lite / E", "A73", "A72", "A71", "A57", "A56", "A55", "A54", "A53", "A52", "A51", "A50", "A37", "A36", "A35", "A34", "A33", "A32 4g", "A32 5g", "A31", "A30", "A29", "A25", "A24", "A23", "A22 4g", "A21s", "A17", "A16", "A15", "A14", "A13", "A12", "A07", "A06", "A05s", "Note 20", "Note 10 lite", "Note 10 plus", "Note 10", "Note 8", "Note 5", "Note 4", "Note 3", "Note 20 ultra", "J5 2016", "J7 prime", "J7 2016", "J6", "J6 plus", "M30s", "M52", "M31", "Y9s", "Y9 primed"],
+            Xiaomi: ["Xiaomi", "Note 13 5G", "Note 11 4G", "Note 8 pro", "Note 9 pro", "Note 9 promax", "Note 9s", "Note 10 4G", "Note 10s", "Note 10 pro", "Note 10 pro promax", "Note 11s", "Note 11 pro", "Note 10 5G", "Note 10T 5G", "Note 11se 5G", "Note 11 5G", "Note 11T 5G", "Note 11s 5G", "Note 10 pro 5G", "Note 12 pro 5G", "Note 12 pro 4G", "5G", "Note 12s", "Note 13 4G", "Note 13 pro 4G", "Note 13 pro 5G", "Note 13 pro", "Note 14", "Note 14 pro", "Note 14 pro plus", "Redmi note 9", "Redmi 10x 4g", "Redmi 9A", "Redmi 10A", "Redmi 9T", "Redmi 12", "Redmi 12C", "Redmi 13C", "Redmi 13X", "Redmi 15", "Redmi 15 c", "Poco X3/X3 pro", "Poco M4 pro 4g", "Poco x4/x4 pro", "Poco F3 5g", "Poco M3", "Poco X4 GT", "Poco M3 pro 4g", "Poco M3 pro 5g", "Poco X3 GT", "Poco X5 pro", "Poco X5 5g", "Poco F5", "poco F5 pro", "Poco F4 pro", "Poco C40", "Poco M5s", "Poco X4", "Poco X4 pro", "Poco M4 pro", "Poco X4 pro", "Mi 11T/Mi 11T pro", "Mi 11 lite 4g/5g", "Mi 11 ultra", "Mi 12T / Mi 12T pro", "Mi 13T / Mi 13T pro"],
+            Huawei: ["Huawei", "P30 lite"]
+        };
+
+        let products = JSON.parse(localStorage.getItem('products')) || [];
+        let orders = JSON.parse(localStorage.getItem('orders')) || [];
+        let currentSliderBanners = JSON.parse(localStorage.getItem('banners')) || [
+            "https://uploadkon.ir/uploads/190804_26ChatGPT-Image-Jul-4-2026-05-25-43-PM.png"
+        ];
+        let currentActiveUser = JSON.parse(localStorage.getItem('user')) || null;
+        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+        let shopCurrentPage = 1;
+        let sliderTimer = null;
+        let directProductId = null;
+
+        if(products.length === 0) {
+            for(let i=1; i<=12; i++){
+                products.push({
+                    id: i,
+                    name: `قاب فانتزی طرح آرس ${i}`,
+                    price: 185000,
+                    img: "https://uploadkon.ir/uploads/190804_26ChatGPT-Image-Jul-4-2026-05-25-43-PM.png",
+                    categories: ["جدید ترین قاب ها"],
+                    starred: i <= 5
+                });
+            }
+            localStorage.setItem('products', JSON.stringify(products));
+        }
+
+        function initApp() {
+            renderSlider();
+            startAutoSlider();
+            renderStarredHomeProducts();
+            renderShop();
+            updateCartCountUI();
+            updateAuthUI();
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.register('/sw.js').catch(console.log);
+            }
+            // همگام‌سازی فیلتر موبایل با دسکتاپ
+            syncFilters();
+        }
+
+        function syncFilters() {
+            const desktopChecks = document.querySelectorAll('.cat-filter');
+            const mobileChecks = document.querySelectorAll('.cat-filter-mobile');
+            // از موبایل به دسکتاپ
+            mobileChecks.forEach(mc => {
+                const val = mc.value;
+                const desktop = document.querySelector(`.cat-filter[value="${val}"]`);
+                if(desktop) desktop.checked = mc.checked;
+            });
+            // از دسکتاپ به موبایل
+            desktopChecks.forEach(dc => {
+                const val = dc.value;
+                const mobile = document.querySelector(`.cat-filter-mobile[value="${val}"]`);
+                if(mobile) mobile.checked = dc.checked;
+            });
+            renderShop();
+        }
+
+        function toggleFilterDrawer() {
+            const drawer = document.getElementById('filterDrawer');
+            drawer.classList.toggle('active');
+        }
+
+        function updateAuthUI() {
+            const authSection = document.getElementById('authSection');
+            if(currentActiveUser) {
+                authSection.innerHTML = `
+                    <div class="user-profile" onclick="showProfile()">
+                        <i class="fas fa-user"></i>
+                        <span>${currentActiveUser.name}</span>
+                    </div>
+                `;
+            } else {
+                authSection.innerHTML = `
+                    <button class="auth-btn" onclick="navigateTo('register')">ثبت نام / ورود</button>
+                `;
+            }
+        }
+
+        function showProfile() {
+            if(!currentActiveUser) return;
+            document.getElementById('profileName').textContent = currentActiveUser.name;
+            document.getElementById('profilePhone').textContent = currentActiveUser.phone;
+            document.getElementById('profileModal').style.display = 'flex';
+        }
+
+        function closeProfileModal() {
+            document.getElementById('profileModal').style.display = 'none';
+        }
+
+        function navigateTo(pageId) {
+            document.querySelectorAll('.app-page').forEach(p => p.classList.remove('active'));
+            const aboutSection = document.getElementById('about-section');
+            if(pageId === 'home') {
+                aboutSection.classList.add('active');
+                document.getElementById('homePage').classList.add('active');
+            } else {
+                aboutSection.classList.remove('active');
+                if(pageId === 'shop') document.getElementById('shopPage').classList.add('active');
+                if(pageId === 'register') {
+                    document.getElementById('registerPage').classList.add('active');
+                    document.querySelector('.register-page-container').classList.add('active');
+                }
+                if(pageId === 'cart') {
+                    document.getElementById('cartPage').classList.add('active');
+                    document.querySelector('.cart-page-container').classList.add('active');
+                    openCartFullscreen();
+                }
+            }
+            // بستن فیلتر دراو موبایل
+            document.getElementById('filterDrawer').classList.remove('active');
+        }
+
+        function renderSlider() {
+            const wrapper = document.getElementById('bannerSliderWrapper');
+            if(currentSliderBanners.length === 0) {
+                wrapper.innerHTML = `<div class="banner-item"><img src="https://uploadkon.ir/uploads/190804_26ChatGPT-Image-Jul-4-2026-05-25-43-PM.png" loading="lazy" style="width:100%; height:auto;"></div>`;
+                return;
+            }
+            wrapper.innerHTML = currentSliderBanners.map(b => `<div class="banner-item"><img src="${b}" loading="lazy" onload="this.style.opacity=1;" style="opacity:0; transition:opacity 0.3s; width:100%; height:auto;"></div>`).join('');
+        }
+
+        function startAutoSlider() {
+            if(sliderTimer) clearInterval(sliderTimer);
+            const slider = document.getElementById('bannerSliderWrapper');
+            sliderTimer = setInterval(() => {
+                if(!slider) return;
+                let currentScroll = slider.scrollLeft;
+                let maxScroll = slider.scrollWidth - slider.clientWidth;
+                if (Math.abs(currentScroll) >= maxScroll - 5) {
+                    slider.scrollTo({ left: 0, behavior: 'smooth' });
+                } else {
+                    slider.scrollBy({ left: -slider.clientWidth, behavior: 'smooth' });
+                }
+            }, 4000);
+        }
+
+        function filterShopByBrand(brandName) {
+            navigateTo('shop');
+            document.querySelectorAll('.cat-filter').forEach(cb => cb.checked = false);
+            document.querySelectorAll('.cat-filter-mobile').forEach(cb => cb.checked = false);
+            if(brandName === 'آیفون') {
+                document.getElementById('filter-iphone').checked = true;
+                document.querySelector('.cat-filter-mobile[value="آیفون"]').checked = true;
+            }
+            if(brandName === 'سامسونگ') {
+                document.getElementById('filter-samsung').checked = true;
+                document.querySelector('.cat-filter-mobile[value="سامسونگ"]').checked = true;
+            }
+            if(brandName === 'شیاومی') {
+                document.getElementById('filter-xiaomi').checked = true;
+                document.querySelector('.cat-filter-mobile[value="شیاومی"]').checked = true;
+            }
+            if(brandName === 'هواوی') {
+                document.getElementById('filter-huawei').checked = true;
+                document.querySelector('.cat-filter-mobile[value="هواوی"]').checked = true;
+            }
+            renderShop();
+        }
+
+        function renderStarredHomeProducts() {
+            const starred = products.filter(p => p.starred === true).slice(0, 10);
+            const grid = document.getElementById('homeStarredGrid');
+            if(starred.length === 0) {
+                grid.innerHTML = '<p style="grid-column: span 4; text-align:center; color:#888;">هیچ محصول ستاره‌داری یافت نشد.</p>';
+                return;
+            }
+            grid.innerHTML = starred.map(p => `
+                <div class="product-card">
+                    <span class="star-badge"><i class="fas fa-star"></i></span>
+                    <img src="${p.img}" loading="lazy" style="width:100%; height:auto;">
+                    <h3 class="product-name">${p.name}</h3>
+                    <div class="product-price">${p.price.toLocaleString()} تومان</div>
+                    <button class="buy-btn" onclick="openDirectBuy(${p.id})">خرید</button>
+                </div>
+            `).join('');
+        }
+
+        function renderShop() {
+            const checkedCats = Array.from(document.querySelectorAll('.cat-filter:checked')).map(cb => cb.value);
+            const searchVal = document.getElementById('shopSearchInput').value.trim().toLowerCase();
+            
+            let filtered = products;
+            if(checkedCats.length > 0) {
+                filtered = products.filter(p => p.categories.some(c => checkedCats.includes(c)));
+            }
+            if(searchVal) {
+                filtered = filtered.filter(p => p.name.toLowerCase().includes(searchVal));
+            }
+
+            const itemsPerPage = 20;
+            const totalPages = Math.ceil(filtered.length / itemsPerPage) || 1;
+            const start = (shopCurrentPage - 1) * itemsPerPage;
+            const paginatedItems = filtered.slice(start, start + itemsPerPage);
+            const grid = document.getElementById('shopProductsGrid');
+            grid.innerHTML = paginatedItems.map(p => `
+                <div class="product-card">
+                    ${p.starred ? '<span class="star-badge"><i class="fas fa-star"></i></span>':''}
+                    <img src="${p.img}" loading="lazy" style="width:100%; height:auto;">
+                    <h3 class="product-name">${p.name}</h3>
+                    <div class="product-price">${p.price.toLocaleString()} تومان</div>
+                    <button class="buy-btn" onclick="openDirectBuy(${p.id})">خرید</button>
+                </div>
+            `).join('');
+            const paginHtml = document.getElementById('shopPagination');
+            paginHtml.innerHTML = '';
+            for(let i=1; i<=totalPages; i++) {
+                paginHtml.innerHTML += `<button class="page-btn ${i===shopCurrentPage?'active':''}" onclick="changePage(${i})">${i}</button>`;
+            }
+        }
+
+        function changePage(p) { shopCurrentPage = p; renderShop(); }
+
+        function openDirectBuy(productId) {
+            if(!currentActiveUser) {
+                alert('لطفا ابتدا در سایت ثبت نام کنید.');
+                navigateTo('register');
+                return;
+            }
+            directProductId = productId;
+            document.getElementById('directBuyModal').style.display = 'flex';
+            document.getElementById('directBrand').value = '';
+            document.getElementById('directModelList').innerHTML = '';
+        }
+
+        function populateDirectModels() {
+            const brand = document.getElementById('directBrand').value;
+            const modelsSelect = document.getElementById('directModelList');
+            modelsSelect.innerHTML = '';
+            if(brand && phoneModelsData[brand]) {
+                phoneModelsData[brand].forEach(m => {
+                    modelsSelect.innerHTML += `<option value="${m}">${m}</option>`;
+                });
+            }
+        }
+
+        function addToCartFromDirect() {
+            const brand = document.getElementById('directBrand').value;
+            const model = document.getElementById('directModelList').value;
+            if(!brand || !model) {
+                alert('لطفا برند و مدل گوشی خود را انتخاب کنید.');
+                return;
+            }
+            const prod = products.find(p => p.id === directProductId);
+            if(prod) {
+                const cartItem = { ...prod, brand: brand, model: model };
+                cart.push(cartItem);
+                localStorage.setItem('cart', JSON.stringify(cart));
+                updateCartCountUI();
+                closeDirectBuyModal();
+                alert(`${prod.name} به سبد خرید اضافه شد.`);
+                openCartFullscreen();
+            }
+        }
+
+        function closeDirectBuyModal() {
+            document.getElementById('directBuyModal').style.display = 'none';
+            directProductId = null;
+        }
+
+        function updateCartCountUI() {
+            document.getElementById('desktopCartCount').innerText = cart.length;
+            document.getElementById('mobileCartCount').innerText = cart.length;
+        }
+
+        function openCartFullscreen() {
+            if(!currentActiveUser) {
+                alert('لطفا ابتدا در سایت ثبت نام کنید.');
+                navigateTo('register');
+                return;
+            }
+            const tbody = document.getElementById('cartItemsTableBody');
+            let total = 0;
+            if(cart.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding:30px; color:#888;">سبد خرید شما خالی است.</td></tr>';
+            } else {
+                tbody.innerHTML = cart.map((item, index) => {
+                    total += item.price;
+                    return `
+                        <tr>
+                            <td><img src="${item.img}" style="width:60px; border-radius:5px;" loading="lazy"></td>
+                            <td>${item.name}${item.brand ? ' ('+item.brand+' - '+item.model+')' : ''}</td>
+                            <td>${item.price.toLocaleString()} تومان</td>
+                            <td><button class="cart-remove-btn" onclick="removeFromCart(${index})"><i class="fas fa-trash-alt"></i> حذف</button></td>
+                        </tr>
+                    `;
+                }).join('');
+            }
+            document.getElementById('cartTotalPrice').innerText = total.toLocaleString();
+            document.querySelectorAll('.app-page').forEach(p => p.classList.remove('active'));
+            document.getElementById('cartPage').classList.add('active');
+            document.querySelector('.cart-page-container').classList.add('active');
+        }
+
+        function removeFromCart(index) {
+            cart.splice(index, 1);
+            localStorage.setItem('cart', JSON.stringify(cart));
+            updateCartCountUI();
+            openCartFullscreen();
+        }
+
+        function proceedToCheckout() {
+            if(cart.length === 0) return alert('سبد خرید شما خالی است!');
+            document.getElementById('checkoutModal').style.display = 'flex';
+        }
+
+        function closeCheckoutModal() {
+            document.getElementById('checkoutModal').style.display = 'none';
+        }
+
+        function handleRegistration() {
+            const name = document.getElementById('regName').value;
+            const phone = document.getElementById('regPhone').value;
+            if(!name || !phone) return alert('وارد کردن نام و شماره تماس الزامی است.');
+            currentActiveUser = { name, phone };
+            localStorage.setItem('user', JSON.stringify(currentActiveUser));
+            updateAuthUI();
+            alert('ثبت نام با موفقیت انجام شد.');
+            navigateTo('home');
+        }
+
+        function promptAdminLogin() {
+            const pass = prompt("رمز ورود به پنل مدیریت را وارد کنید:");
+            if(pass === "1806") {
+                document.getElementById('adminFullscreenPage').style.display = 'block';
+                loadAdminData();
+            } else if (pass !== null) {
+                alert("رمز عبور نامعتبر است!");
+            }
+        }
+
+        function closeAdminPanel() { document.getElementById('adminFullscreenPage').style.display = 'none'; }
+
+        function switchAdminTab(tabId, btn) {
+            document.querySelectorAll('.admin-section-content').forEach(c => c.classList.remove('active'));
+            document.querySelectorAll('.admin-menu-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            btn.classList.add('active');
+        }
+
+        function loadAdminData() {
+            const tbody = document.getElementById('adminOrdersTableBody');
+            tbody.innerHTML = orders.map(o => `<tr><td>${o.name}</td><td>${o.phone}</td><td>${o.address}</td><td>${o.productName}</td><td>${o.phoneModel}</td></tr>`).join('');
+            renderAdminProductsDeleteList();
+            renderAdminBannersList();
+        }
+
+        function renderAdminProductsDeleteList() {
+            const container = document.getElementById('adminProductsDeleteContainer');
+            container.innerHTML = products.map(p => `
+                <div class="admin-p-item">
+                    <span>${p.name} (${p.price.toLocaleString()} تومان) ${p.starred ? '⭐️':''}</span>
+                    <button class="admin-p-delete-btn" onclick="deleteProductFromAdmin(${p.id})">حذف کامل</button>
+                </div>
+            `).join('');
+        }
+
+        function deleteProductFromAdmin(id) {
+            if(confirm('آیا از حذف این قاب اطمینان دارید؟')) {
+                products = products.filter(p => p.id !== id);
+                localStorage.setItem('products', JSON.stringify(products));
+                loadAdminData();
+                renderShop();
+                renderStarredHomeProducts();
+            }
+        }
+
+        function addNewProductFromAdmin() {
+            const name = document.getElementById('pName').value;
+            const price = parseFloat(document.getElementById('pPrice').value);
+            const urlImg = document.getElementById('pImgUrl').value;
+            const fileImg = document.getElementById('pImgFile').files[0];
+            const isStarred = document.getElementById('pStar').checked;
+            const checkedCats = Array.from(document.querySelectorAll('.p-cat:checked')).map(cb => cb.value);
+            if(!name || !price) return alert('تکمیل نام و قیمت اجباری است.');
+            if(isStarred && products.filter(p => p.starred === true).length >= 10) {
+                return alert('خطا: ظرفیت محصولات ستاره‌دار تکمیل است (حداکثر ۱۰ قاب).');
+            }
+            const proceed = (imgSrc) => {
+                products.push({
+                    id: Date.now(),
+                    name,
+                    price,
+                    img: imgSrc || "https://uploadkon.ir/uploads/190804_26ChatGPT-Image-Jul-4-2026-05-25-43-PM.png",
+                    categories: checkedCats,
+                    starred: isStarred
+                });
+                localStorage.setItem('products', JSON.stringify(products));
+                loadAdminData();
+                renderShop();
+                renderStarredHomeProducts();
+                alert('قاب جدید اضافه شد.');
+                document.getElementById('pName').value = '';
+                document.getElementById('pPrice').value = '';
+                document.getElementById('pImgUrl').value = '';
+                document.getElementById('pImgFile').value = '';
+                document.getElementById('pStar').checked = false;
+                document.querySelectorAll('.p-cat:checked').forEach(cb => cb.checked = false);
+            };
+            if(fileImg) {
+                const reader = new FileReader();
+                reader.onload = function(e) { proceed(e.target.result); };
+                reader.readAsDataURL(fileImg);
+            } else {
+                proceed(urlImg);
+            }
+        }
+
+        function renderAdminBannersList() {
+            const div = document.getElementById('adminBannerList');
+            div.innerHTML = currentSliderBanners.map((b, i) => `
+                <div style="display:flex; justify-content:space-between; align-items:center; background:#0f172a; padding:8px; margin-bottom:5px; border-radius:5px; border:1px solid #334155;">
+                    <img src="${b}" style="width:50px; height:30px; object-fit:cover; border-radius:3px;" loading="lazy">
+                    <button onclick="removeBanner(${i})" style="color:#ef4444; background:none; border:none; cursor:pointer;">حذف</button>
+                </div>
+            `).join('');
+        }
+
+        function addBannerFromAdmin() {
+            if(currentSliderBanners.length >= 5) return alert('حداکثر ظرفیت اسلایدر ۵ بنر است.');
+            const urlInput = document.getElementById('adminBannerUrl').value;
+            const fileInput = document.getElementById('adminBannerFile').files[0];
+            const add = (src) => {
+                currentSliderBanners.push(src);
+                localStorage.setItem('banners', JSON.stringify(currentSliderBanners));
+                renderAdminBannersList();
+                renderSlider();
+                startAutoSlider();
+                alert('بنر جدید با موفقیت اضافه و لود شد.');
+                document.getElementById('adminBannerUrl').value = '';
+                document.getElementById('adminBannerFile').value = '';
+            };
+            if(fileInput) {
+                const reader = new FileReader();
+                reader.onload = function(e) { add(e.target.result); };
+                reader.readAsDataURL(fileInput);
+            } else if(urlInput) {
+                add(urlInput);
+            } else {
+                alert('لطفا یا لینک وارد کنید یا فایل انتخاب کنید.');
+            }
+        }
+
+        function removeBanner(index) {
+            currentSliderBanners.splice(index, 1);
+            localStorage.setItem('banners', JSON.stringify(currentSliderBanners));
+            renderAdminBannersList();
+            renderSlider();
+            startAutoSlider();
+        }
+
+        function saveGlobalSettings() {
+            const vidUrl = document.getElementById('adminVideoUrl').value;
+            if(vidUrl) document.getElementById('globalVideo').src = vidUrl;
+            alert('تغییرات با موفقیت ذخیره شد.');
+        }
+
+        function openPostalModal() { document.getElementById('postalModal').style.display = 'flex'; }
+        function closePostalModal() { document.getElementById('postalModal').style.display = 'none'; }
+        function openSidebar() { document.getElementById('mobileSidebar').classList.add('active'); document.getElementById('sidebarOverlay').classList.add('active'); }
+        function closeSidebar() { document.getElementById('mobileSidebar').classList.remove('active'); document.getElementById('sidebarOverlay').classList.remove('active'); }
+        function scrollToAbout() { navigateTo('home'); document.getElementById('about-section').scrollIntoView({ behavior: 'smooth' }); closeSidebar(); }
+
+        window.onclick = function(e) { 
+            if (e.target.classList.contains('modal')) e.target.style.display = "none";
+        }
+
+        initApp();
+    </script>
+</body>
+</html>
