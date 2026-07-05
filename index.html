@@ -433,7 +433,7 @@
         .user-profile-modal i { font-size: 3rem; color: #333; margin-bottom: 10px; }
         .user-profile-modal p { font-size: 1.1rem; color: #555; margin: 5px 0; }
 
-        /* ===== فیلتر شناور موبایل ===== */
+        /* ===== فیلتر شناور موبایل - فقط در فروشگاه ===== */
         .filter-fab {
             display: none;
             position: fixed;
@@ -547,33 +547,51 @@
 
         @media (max-width: 768px) {
             .navbar { padding: 8px 12px; }
-            .logo-container img { height: 35px; }
-            .brand-name { font-size: 1.1rem; }
+            .logo-container img { height: 32px; }
+            .brand-name { font-size: 1rem; }
             .video-banner { height: 50px; }
             .banner-container { margin: 15px auto; }
             .banner-item img { min-height: 100px; width: 100%; height: auto; }
             .categories-container { grid-template-columns: 1fr 1fr; gap: 10px; margin: 20px auto; }
+            
             .home-products-grid { 
                 display: flex; 
-                gap: 12px; 
+                gap: 10px; 
                 overflow-x: auto; 
                 scroll-snap-type: x mandatory;
                 -webkit-overflow-scrolling: touch;
                 padding: 5px 0;
             }
             .home-products-grid .product-card { 
-                min-width: 160px; 
+                min-width: 140px; 
                 flex: 0 0 auto; 
                 scroll-snap-align: start;
+                padding: 10px;
             }
+            .home-products-grid .product-card img { border-radius: 8px; margin-bottom: 8px; }
+            .home-products-grid .product-name { font-size: 0.8rem; margin-bottom: 5px; }
+            .home-products-grid .product-price { font-size: 0.85rem; margin-bottom: 8px; }
+            .home-products-grid .buy-btn { font-size: 0.7rem; padding: 6px; }
+            
             .products-showcase { 
                 grid-template-columns: 1fr 1fr; 
-                gap: 10px; 
+                gap: 8px; 
             }
-            .product-card { padding: 10px; }
-            .product-name { font-size: 0.9rem; }
-            .product-price { font-size: 0.95rem; }
-            .buy-btn { font-size: 0.8rem; padding: 8px; }
+            .product-card { 
+                padding: 8px; 
+                border-radius: 10px;
+            }
+            .product-card img { 
+                border-radius: 6px; 
+                margin-bottom: 8px;
+                max-height: 150px;
+                object-fit: contain;
+            }
+            .product-name { font-size: 0.8rem; margin-bottom: 5px; }
+            .product-price { font-size: 0.85rem; margin-bottom: 8px; }
+            .buy-btn { font-size: 0.7rem; padding: 6px; border-radius: 6px; }
+            .star-badge { font-size: 0.7rem; padding: 3px; top: 5px; right: 5px; }
+            
             .about-section { grid-template-columns: 1fr; margin: 40px auto; }
             .about-title { font-size: 1.5rem; }
             .about-text { font-size: 1rem; }
@@ -582,31 +600,36 @@
             .social-links { justify-content: center; }
             .footer-bottom { flex-direction: column; text-align: center; }
             .cart-page-container { padding: 15px; margin: 20px 10px; }
-            .cart-table th, .cart-table td { padding: 8px; font-size: 0.85rem; }
-            .cart-actions .buy-btn { max-width: 100%; padding: 14px; font-size: 1.1rem; }
+            .cart-table th, .cart-table td { padding: 8px; font-size: 0.8rem; }
+            .cart-actions .buy-btn { max-width: 100%; padding: 12px; font-size: 1rem; }
             .register-page-container { margin: 20px 10px; padding: 20px; }
             .sidebar { width: 280px; left: -290px; }
             .payment-glass-modal .modal-content { padding: 25px 15px; }
             .payment-glass-modal .social-icons-row a { font-size: 2.2rem; }
-            .filter-drawer { min-width: 200px; left: 10px; right: 10px; bottom: 90px; }
+            .filter-drawer { min-width: 200px; left: 10px; right: 10px; bottom: 80px; }
+            .filter-fab { width: 48px; height: 48px; font-size: 1.2rem; bottom: 15px; left: 15px; }
         }
 
         @media (max-width: 480px) {
-            .home-products-grid .product-card { min-width: 130px; }
-            .home-products-grid { gap: 8px; }
-            .product-name { font-size: 0.75rem; }
-            .product-price { font-size: 0.8rem; }
-            .buy-btn { font-size: 0.7rem; padding: 5px; }
-            .products-showcase { grid-template-columns: 1fr 1fr; gap: 8px; }
-            .categories-container { grid-template-columns: 1fr 1fr; gap: 8px; }
-            .brand-item { width: 70px; }
-            .brand-item img { width: 60px; height: 60px; }
-            .brand-item div { font-size: 0.8rem; }
-            .brands-title { font-size: 1.2rem; }
-            .sidebar { width: 240px; left: -250px; }
-            .banner-item img { min-height: 80px; }
-            .filter-fab { width: 48px; height: 48px; font-size: 1.2rem; bottom: 15px; left: 15px; }
-            .filter-drawer { padding: 15px; min-width: 160px; }
+            .home-products-grid .product-card { min-width: 120px; padding: 6px; }
+            .home-products-grid .product-name { font-size: 0.7rem; }
+            .home-products-grid .product-price { font-size: 0.75rem; }
+            .home-products-grid .buy-btn { font-size: 0.6rem; padding: 4px; }
+            .products-showcase { grid-template-columns: 1fr 1fr; gap: 6px; }
+            .product-card { padding: 6px; }
+            .product-card img { max-height: 120px; }
+            .product-name { font-size: 0.7rem; }
+            .product-price { font-size: 0.75rem; }
+            .buy-btn { font-size: 0.6rem; padding: 4px; }
+            .categories-container { grid-template-columns: 1fr 1fr; gap: 6px; }
+            .brand-item { width: 60px; }
+            .brand-item img { width: 50px; height: 50px; }
+            .brand-item div { font-size: 0.7rem; }
+            .brands-title { font-size: 1rem; }
+            .sidebar { width: 220px; left: -230px; padding: 20px 15px; }
+            .banner-item img { min-height: 60px; }
+            .filter-drawer { padding: 15px; min-width: 150px; }
+            .filter-fab { width: 42px; height: 42px; font-size: 1rem; bottom: 12px; left: 12px; }
         }
     </style>
 </head>
@@ -693,7 +716,6 @@
     <div id="shopPage" class="app-page">
         <div class="shop-page-container">
             <div class="products-area">
-                <!-- سرچ -->
                 <div class="search-box">
                     <input type="text" id="shopSearchInput" placeholder="جستجوی قاب..." oninput="renderShop()">
                     <button onclick="renderShop()"><i class="fas fa-search"></i></button>
@@ -719,7 +741,7 @@
         </div>
     </div>
 
-    <!-- فیلتر شناور موبایل -->
+    <!-- فیلتر شناور موبایل - فقط در فروشگاه -->
     <button class="filter-fab" id="filterFab" onclick="toggleFilterDrawer()"><i class="fas fa-sliders-h"></i></button>
     <div class="filter-drawer" id="filterDrawer">
         <button class="close-drawer" onclick="toggleFilterDrawer()"><i class="fas fa-times"></i></button>
@@ -1021,23 +1043,28 @@
             renderShop();
             updateCartCountUI();
             updateAuthUI();
+            // نمایش/مخفی کردن دکمه فیلتر در فروشگاه
+            checkFilterFabVisibility();
             if ('serviceWorker' in navigator) {
                 navigator.serviceWorker.register('/sw.js').catch(console.log);
             }
-            // همگام‌سازی فیلتر موبایل با دسکتاپ
             syncFilters();
+        }
+
+        function checkFilterFabVisibility() {
+            const fab = document.getElementById('filterFab');
+            const isShop = document.getElementById('shopPage').classList.contains('active');
+            fab.style.display = (isShop && window.innerWidth <= 992) ? 'flex' : 'none';
         }
 
         function syncFilters() {
             const desktopChecks = document.querySelectorAll('.cat-filter');
             const mobileChecks = document.querySelectorAll('.cat-filter-mobile');
-            // از موبایل به دسکتاپ
             mobileChecks.forEach(mc => {
                 const val = mc.value;
                 const desktop = document.querySelector(`.cat-filter[value="${val}"]`);
                 if(desktop) desktop.checked = mc.checked;
             });
-            // از دسکتاپ به موبایل
             desktopChecks.forEach(dc => {
                 const val = dc.value;
                 const mobile = document.querySelector(`.cat-filter-mobile[value="${val}"]`);
@@ -1086,7 +1113,10 @@
                 document.getElementById('homePage').classList.add('active');
             } else {
                 aboutSection.classList.remove('active');
-                if(pageId === 'shop') document.getElementById('shopPage').classList.add('active');
+                if(pageId === 'shop') {
+                    document.getElementById('shopPage').classList.add('active');
+                    checkFilterFabVisibility();
+                }
                 if(pageId === 'register') {
                     document.getElementById('registerPage').classList.add('active');
                     document.querySelector('.register-page-container').classList.add('active');
@@ -1097,7 +1127,6 @@
                     openCartFullscreen();
                 }
             }
-            // بستن فیلتر دراو موبایل
             document.getElementById('filterDrawer').classList.remove('active');
         }
 
@@ -1454,6 +1483,9 @@
         window.onclick = function(e) { 
             if (e.target.classList.contains('modal')) e.target.style.display = "none";
         }
+
+        // رصد تغییر سایز برای نمایش فیلتر
+        window.addEventListener('resize', checkFilterFabVisibility);
 
         initApp();
     </script>
